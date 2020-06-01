@@ -11,6 +11,7 @@ from threading import Thread, Lock
 import easytrader
 from logbook import Logger, StreamHandler
 
+
 from .event_engine import EventEngine
 from .log_handler.default_handler import DefaultLogHandler
 from .push_engine.clock_engine import ClockEngine
@@ -41,7 +42,8 @@ class MainEngine:
             self.user = easytrader.use(broker)
             need_data_file = pathlib.Path(need_data)
             if need_data_file.exists():
-                self.user.prepare(need_data)
+                # self.user.prepare(need_data)
+                self.user.prepare(user='666631430775', password='199108', comm_password='085034')
             else:
                 log_handler.warn("券商账号信息文件 %s 不存在, easytrader 将不可用" % need_data)
         else:
@@ -91,8 +93,8 @@ class MainEngine:
             signal.SIGINT,  # 键盘信号
             signal.SIGTERM,  # kill 命令
         ]
-        if sys.platform != 'win32':
-            self.shutdown_signals.extend([signal.SIGHUP, signal.SIGQUIT])
+        #if sys.platform != 'win32':
+        #   self.shutdown_signals.extend([signal.SIGHUP, signal.SIGQUIT])
 
         for s in self.shutdown_signals:
             # 捕获退出信号后的要调用的,唯一的 shutdown 接口
