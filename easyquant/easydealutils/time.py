@@ -1,18 +1,22 @@
 import datetime
 import doctest
 from functools import lru_cache
-
 import requests
 
+import sys  # 2020 06 05 | w
+path = 'D:\\master\\python\\quant_test\\quant\\tools'
+sys.path
+sys.path.append(path)
+from connect_tushare import get_tushare
+# 2020 06 05 | w
 
 @lru_cache()
 def _is_holiday(day):
-    # 该接口可能将于 2016.7.1 过期, 请关注该主页
-    api = 'http://www.easybots.cn/api/holiday.php'
-    params = {'d': day}
-    rep = requests.get(api, params)
-    res = rep.json()[day if isinstance(day, str) else day[0]]
-    return True if res == "1" else False
+    pro = get_tushare()  # 2020 06 05 | w
+    is_open = pro.trade_cal(exchange='', start_date=day, end_date=day)
+    is_open = is_open['is_open'][0]
+    return True if is_open == "1" else False
+# 2020 06 05 | w
 
 
 def is_holiday(now_time):
